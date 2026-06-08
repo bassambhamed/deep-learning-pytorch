@@ -1,0 +1,39 @@
+# ===========================================================================
+# Formation avancée en Deep Learning avec PyTorch
+# Computer Vision & Séries temporelles
+# ---------------------------------------------------------------------------
+# Installation : pip install -r requirements.txt
+# (de préférence dans un environnement conda dédié — voir la section Setup
+#  du README.md)
+# ===========================================================================
+
+# --- Cœur Deep Learning ---
+torch>=2.1
+torchvision>=0.16
+torchmetrics>=1.0
+
+# --- Stack scientifique & manipulation de données ---
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.3
+matplotlib>=3.7
+
+# --- Jeux de données médicaux (MedMNIST) ---
+medmnist>=3.0
+
+# --- Explicabilité / XAI (Module 2) ---
+captum>=0.7
+shap>=0.44
+scikit-image>=0.21
+
+# --- Environnement notebooks ---
+jupyterlab>=4.0
+ipykernel>=6.0
+
+# --- Modules 3 & 4 (à venir) — décommenter au besoin ---
+# timm>=1.0            # Vision Transformers (ViT, Swin)
+# transformers>=4.40   # SegFormer (Hugging Face)
+# diffusers>=0.27      # Modèles de diffusion (DDPM / DDIM)
+# umap-learn>=0.5      # Visualisation d'espaces latents (AE / VAE)
+# onnx>=1.16           # Export ONNX (déploiement)
+# onnxruntime>=1.17    # Inférence ONNX
