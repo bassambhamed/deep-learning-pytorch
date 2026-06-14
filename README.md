@@ -36,8 +36,8 @@ les réseaux récurrents et l'explicabilité (XAI).
 |--------|--------|--------|
 | **Module 1** | Fondations PyTorch · MLP · CNN (data augmentation, VGG-like *from scratch*) | ✅ Disponible |
 | **Module 2** | Transfer Learning & Fine-tuning · RNN/LSTM/GRU (séries temporelles) · Explicabilité (Grad-CAM, IG, SHAP, LIME, Captum) | ✅ Disponible |
-| **Module 3** | Autoencoders · VAE · Modèles de Diffusion (DDPM / DDIM) | 🚧 En développement |
-| **Module 4** | GAN (DCGAN, cGAN, Pix2Pix, SRGAN) · Vision Transformers (ViT, Swin, SegFormer) · Déploiement (TorchScript / ONNX) · Projet final | 🚧 En développement |
+| **Module 3** | Autoencoders · VAE · Modèles de Diffusion (DDPM / DDIM) | ✅ Disponible |
+| **Module 4** | GAN (DCGAN, cGAN, Pix2Pix, SRGAN) · Vision Transformers (ViT, Swin, SegFormer) · Déploiement (TorchScript / ONNX / quantification) · Projet final | 🚧 TP 10–12 disponibles · Projet (13) à venir |
 
 ## Structure du dépôt
 
@@ -46,12 +46,14 @@ les réseaux récurrents et l'explicabilité (XAI).
 ├── slides/                  # Présentations (PDF)
 │   ├── 00_plan_formation.pdf
 │   ├── 01_module1_pytorch_mlp_cnn.pdf
-│   └── 02_module2_transfer_rnn_xai.pdf
+│   ├── 02_module2_transfer_rnn_xai.pdf
+│   ├── 03_module3_ae_vae_diffusion.pdf
+│   └── 04_module4_gan_vit_deploiement.pdf
 ├── tp/                      # Travaux pratiques (notebooks Jupyter)
 │   ├── module_1/            # 01 PyTorch · 02 MLP · 03 CNN (DermaMNIST)
 │   ├── module_2/            # 04 Transfer Learning · 05 RNN/LSTM/GRU · 06 XAI
-│   ├── module_3/            # 07–09 (à venir)
-│   └── module_4/            # 10–13 (à venir)
+│   ├── module_3/            # 07 Autoencoders · 08 VAE · 09 Diffusion (DDPM/DDIM)
+│   └── module_4/            # 10 GAN · 11 ViT/Swin/SegFormer · 12 Déploiement · 13 Projet (à venir)
 ├── requirements.txt
 └── README.md
 ```

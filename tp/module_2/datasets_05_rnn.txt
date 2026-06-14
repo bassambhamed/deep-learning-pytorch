@@ -1,0 +1,102 @@
+================================================================================
+DATASETS DU TP 05 — RNN, LSTM & GRU POUR SÉRIES TEMPORELLES
+Formation avancée en Deep Learning avec PyTorch — Computer Vision & Séries temporelles
+Bassem Ben Hamed — ENETCOM, Université de Sfax
+================================================================================
+
+Le notebook 05_rnn_lstm_gru_series_temporelles.ipynb utilise 3 datasets,
+un par tâche canonique de séries temporelles. Tous sont téléchargés
+automatiquement depuis leurs sources officielles dans ./data/ (cache local,
+jamais commité dans le dépôt).
+
+--------------------------------------------------------------------------------
+1. UCI HAR — Human Activity Recognition (Partie A : CLASSIFICATION)
+--------------------------------------------------------------------------------
+Source     : archive.ics.uci.edu (dataset public n°240, Anguita et al., 2013)
+Taille     : ~60 MB (archive ZIP, extraite dans data/UCI_HAR/)
+
+Contenu    : enregistrements accéléromètre + gyroscope d'un smartphone
+             (Samsung Galaxy S II porté à la taille) sur 30 sujets effectuant
+             6 activités :
+               1. WALKING            (marche)
+               2. WALKING_UPSTAIRS   (montée d'escaliers)
+               3. WALKING_DOWNSTAIRS (descente d'escaliers)
+               4. SITTING            (assis)
+               5. STANDING           (debout)
+               6. LAYING             (allongé)
+
+Format     : 9 canaux capteurs (accéléromètre body 3D + accéléromètre total 3D
+             + gyroscope 3D), découpés en fenêtres glissantes de 128 pas de
+             temps (2,56 s à 50 Hz).
+             - 7 352 séquences en train, 2 947 en test
+             - Tenseur d'entrée par séquence : X ∈ R^(128 × 9)
+
+Tâche      : classifier la séquence complète x_{1:128} en une des 6 activités.
+Modèle     : LSTM 2 couches (hidden=64) → couche linéaire sur le dernier
+             hidden state h_n[-1].
+Prétraitement : StandardScaler par canal, ajusté sur le train uniquement.
+Métriques  : Accuracy, F1 macro.
+
+--------------------------------------------------------------------------------
+2. ETTh1 — Electricity Transformer Temperature (Partie B : FORECASTING)
+--------------------------------------------------------------------------------
+Source     : github.com/zhouhaoyi/ETDataset (Zhou et al., AAAI 2021)
+             Fichier ETT-small/ETTh1.csv, ~2,5 MB, téléchargé dans data/
+
+Contenu    : température de transformateurs électriques en Chine sur 2 ans
+             (2016–2018), échantillonnage horaire → 17 420 points.
+             7 colonnes (6 features de charge + 1 cible) :
+               HUFL / HULL : High UseFul / UseLess Load
+               MUFL / MULL : Middle UseFul / UseLess Load
+               LUFL / LULL : Low UseFul / UseLess Load
+               OT          : Oil Temperature (variable cible)
+
+Tâche      : forecasting multi-step direct par fenêtre glissante.
+             Entrée L = 96 heures (4 jours, toutes les features)
+             → prédiction des H = 24 prochaines heures d'OT.
+Modèle     : GRU 2 couches → Linear(24).
+Prétraitement : split TEMPOREL 70 % / 10 % / 20 % (jamais aléatoire pour des
+             séries temporelles), StandardScaler ajusté sur le train uniquement.
+Métriques  : MAE, RMSE, MAPE.
+
+--------------------------------------------------------------------------------
+3. AI4I 2020 — Predictive Maintenance (Partie C : DÉTECTION D'ANOMALIES)
+--------------------------------------------------------------------------------
+Source     : archive.ics.uci.edu (dataset public n°601, Matzka, 2020)
+             Archive ZIP extraite dans data/AI4I2020/ (ai4i2020.csv, ~500 kB)
+
+Contenu    : machine industrielle simulée — 10 000 enregistrements,
+             10 features dont 5 capteurs utilisés dans le TP :
+               Air temperature [K]      : température ambiante
+               Process temperature [K]  : température du processus
+               Rotational speed [rpm]   : vitesse de rotation
+               Torque [Nm]              : couple
+               Tool wear [min]          : usure de l'outil
+             Label : Machine failure (binaire), très DÉSÉQUILIBRÉ
+             (~3,4 % de pannes seulement).
+
+Tâche      : détection d'anomalies traitée comme classification binaire
+             séquentielle. Le dataset étant tabulaire, on simule une fenêtre
+             temporelle en regroupant W = 20 enregistrements consécutifs
+             (l'ordre des lignes représente la chronologie de production) :
+             x_{1:20} ∈ R^(20 × 5) → ŷ ∈ {0, 1}
+Modèle     : BiLSTM 1 couche → Linear(2).
+Prétraitement : class weights w_c = N / (2·N_c) dans CrossEntropyLoss pour
+             compenser le déséquilibre.
+Métriques  : AUC-ROC et F1 (l'accuracy est trompeuse sur classes déséquilibrées).
+
+--------------------------------------------------------------------------------
+SYNTHÈSE
+--------------------------------------------------------------------------------
+| Tâche                  | Dataset   | Architecture          | Métriques        |
+|------------------------|-----------|-----------------------|------------------|
+| Classification         | UCI HAR   | LSTM 2 couches        | Accuracy, F1 macro|
+| Forecasting            | ETTh1     | GRU 2 couches         | MAE, RMSE, MAPE  |
+| Détection d'anomalies  | AI4I 2020 | BiLSTM 1 couche       | AUC-ROC, F1      |
+
+Points communs aux 3 pipelines :
+- Téléchargement automatique avec fallback SSL (helper safe_urlretrieve)
+- Normalisation par StandardScaler ajusté sur le train uniquement
+- Gradient clipping (clip_grad_norm_, max_norm=1.0)
+- batch_first=True systématique
+================================================================================
